@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 class OracleConnection {
-    void connect() {
+    int executeQuery() {
+        int dbSize = 0;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "oraclexe");
@@ -19,12 +20,13 @@ class OracleConnection {
                     "WHERE fs.tablespace_name (+)  = df.tablespace_name and df.tablespace_name in ('APWDATA','EDE','KS','USERS','APWIDX') " +
                     "GROUP BY df.tablespace_name,df.bytes");
             while (resultSet.next()) {
-                System.out.println(resultSet.getString(1) + " " + resultSet.getInt(2) + " " + resultSet.getDouble(3));
+                dbSize += resultSet.getInt(2);
+                dbSize -= resultSet.getDouble(3);
             }
             con.close();
         } catch (Exception e) {
             System.out.println(e);
         }
-
+        return dbSize;
     }
 }

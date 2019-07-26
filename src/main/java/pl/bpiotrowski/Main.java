@@ -4,6 +4,6 @@ public class Main {
     public static void main(String[] args) {
         OracleConnection connection = new OracleConnection();
 
-        connection.connect();
+        System.out.println("DB SIZE = " + connection.executeQuery() + "MB");
     }
 }
